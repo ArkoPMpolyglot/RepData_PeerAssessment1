@@ -14,7 +14,8 @@ output:
 
 
 ## What is mean total number of steps taken per day?
-```{r, echo = TRUE}
+
+```r
 activity <- read.csv("activity.csv")
 
 activity$date <- as.POSIXct(activity$date, "%Y-%m-%d")
@@ -25,22 +26,32 @@ names(activity_total_steps) <- c("date", "steps")
 mean(activity_total_steps$steps)
 ```
 
+```
+## [1] 9354.23
+```
+
 
 
 ## What is the average daily activity pattern?
 We do a time series plot of the average daily activity pattern 
-```{r,echo=TRUE}
+
+```r
 average_daily_activity <- aggregate(steps~interval, data=activity, mean,na.rm=TRUE)
 plot(steps~interval, data=average_daily_activity, type="l")
-png("TimeSeries.png")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
+png("TimeSeries.png")
 ```
 
 
 
 ## Imputing missing values
 We replace the missing values with mean value of the interval and putting in the place of missing values
-```{r,echo=TRUE}
+
+```r
 #We replace the missing values with mean of the interval
 getMeanaverage_daily_activity<-function(interval){
   average_daily_activity[average_daily_activity$interval==interval,]$steps
@@ -58,7 +69,8 @@ We also then do a histogram and saved it in Hist.NoNA.png
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r,echo=TRUE}
+
+```r
 activityDataNoNA$date <- as.Date(strptime(activityDataNoNA$date, format="%Y-%m-%d"))
 activityDataNoNA$day <- weekdays(activityDataNoNA$date)
 for (i in 1:nrow(activityDataNoNA)) {
@@ -77,4 +89,6 @@ library(lattice)
 xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2), 
        xlab = "Interval", ylab = "Number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 We see on weekends the activity remains high and same throughout whereas in case in weekdays it remains very high at particular interval and then falls
